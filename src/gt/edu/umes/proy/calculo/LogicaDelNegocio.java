@@ -25,6 +25,7 @@ public class LogicaDelNegocio {
         long segSemanas = (long) semanas * 7 * 86400; //604,800s
         long segMeses = (long) meses * 30 * 86400; //2,592,000s
 
+        System.out.println("This is a Demo :)");
         return segMeses + segSemanas + segDias + segHoras + segMinutos;
     }
 
