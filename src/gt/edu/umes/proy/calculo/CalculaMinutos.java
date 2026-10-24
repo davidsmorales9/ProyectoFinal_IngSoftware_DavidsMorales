@@ -17,7 +17,8 @@ public class CalculaMinutos {
         long totalSegundos = LogicaDelNegocio.calcularSegundos(meses, semanas, dias, horas, minutos);
 
         System.out.println("Total en segundos: " + totalSegundos);
-    
+        
+    /*Cambio de prueba 23 de octubre*/
 
 	}
 
