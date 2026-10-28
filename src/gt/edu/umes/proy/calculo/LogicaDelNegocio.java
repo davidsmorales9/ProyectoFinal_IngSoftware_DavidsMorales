@@ -1,32 +1,41 @@
 package gt.edu.umes.proy.calculo;
 
 public class LogicaDelNegocio {
-	public static boolean validarParametros(String[] args) {
-        if (args.length != 5) {
-            System.out.println("Error: Debe ingresar exactamente 5 parametros (meses semanas dias horas minutos).");
+
+    // Función 1: Disponible para pruebas unitarias de validación
+    public static boolean validarParametros(String[] args) {
+        if (args == null || args.length != 5) {
             return false;
         }
         try {
             for (String arg : args) {
-                Integer.parseInt(arg);
+                Long.parseLong(arg);
             }
         } catch (NumberFormatException e) {
-            System.out.println("Error: Todos los valores de entrada deben ser numeros enteros.");
             return false;
         }
         return true;
     }
 
-    public static long calcularSegundos(int meses, int semanas, int dias, int horas, int minutos) {
-    
-        long segMinutos = (long) minutos * 60; //60s
-        long segHoras = (long) horas * 3600; //3,600s
-        long segDias = (long) dias * 86400; //86,400ss
-        long segSemanas = (long) semanas * 7 * 86400; //604,800
-        long segMeses = (long) meses * 30 * 86400; //2,592,000
+    // Función 2: Realiza validación interna y cálculo en una sola llamada segura
+    public static long calcularSegundos(String[] args) {
+        if (!validarParametros(args)) {
+            throw new IllegalArgumentException("Error: Debe ingresar exactamente 5 números enteros válidos.");
+        }
 
-        System.out.println("This is a Demo");
+        long meses = Long.parseLong(args[0]);
+        long semanas = Long.parseLong(args[1]);
+        long dias = Long.parseLong(args[2]);
+        long horas = Long.parseLong(args[3]);
+        long minutos = Long.parseLong(args[4]);
+
+        // Ajuste de factores temporales exactos
+        long segMinutos = minutos * 60;
+        long segHoras = horas * 3600;
+        long segDias = dias * 86400;
+        long segSemanas = semanas * 604800; // 7 * 86400
+        long segMeses = meses * 2592000;   // 30 * 86400
+
         return segMeses + segSemanas + segDias + segHoras + segMinutos;
     }
-
 }
