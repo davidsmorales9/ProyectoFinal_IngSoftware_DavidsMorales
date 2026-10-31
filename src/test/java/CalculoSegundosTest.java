@@ -11,7 +11,7 @@ public class CalculoSegundosTest {
     public void testValidarParametrosConLetras() {
         String[] argsInvalidos = {"1", "tres", "6", "20", "1"};
         
-        // Verificamos que al ejecutar se lance una excepción (NumberFormatException o IllegalArgumentException)
+        // Verificación que al ejecutar se lance una excepción (NumberFormatException o IllegalArgumentException)
         assertThrows(Exception.class, () -> {
             LogicaDelNegocio.calcularSegundos(argsInvalidos);
         }, "Debería lanzar una excepción al recibir letras en los parámetros.");
