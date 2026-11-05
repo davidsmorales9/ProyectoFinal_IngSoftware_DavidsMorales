@@ -71,7 +71,7 @@
             <!-- Correo -->
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Correo</mat-label>
-                <input matInput type="email" formControlName="correo" placeholder="correo@ejemplo.com">
+                <input matInput type="email" formControlName="correo" placeholder="correo@gmail.com">
                 <mat-error *ngIf="formEstudiante.get('correo')?.hasError('required')">El dato es requerido</mat-error>
                 <mat-error *ngIf="formEstudiante.get('correo')?.hasError('email')">Formato de correo
                     inválido</mat-error>

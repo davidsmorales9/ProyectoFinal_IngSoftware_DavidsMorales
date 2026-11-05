@@ -9,7 +9,7 @@
   background: #f8f9fa;
   padding: 20px;
   border-radius: 8px;
-  border: 1px solid #ff2600;
+  border: 1px solid #1f1f1f;
 }
 
 .form-row {
@@ -143,3 +143,4 @@ select {
   padding: 0 12px;
   box-sizing: border-box;
 }
+

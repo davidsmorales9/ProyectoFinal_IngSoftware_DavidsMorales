@@ -142,10 +142,12 @@ h2 {
     border-radius: 3px;
     cursor: pointer;
     color: white;
+    margin-left: 8px;
 }
 
 .btn-action {
     background-color: #f0ad4e;
+
 }
 
 .btn-danger {

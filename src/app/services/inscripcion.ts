@@ -5,46 +5,43 @@ import { Inscripcion } from '../models/inscripcion';
 @Injectable({
   providedIn: 'root'
 })
-
-//Clase para el servicio de inscripciones
 export class InscripcionService {
-  //Clave para almacenar las inscripciones en el almacenamiento local
-  private readonly STORAGE_KEY = 'academic_inscripciones';
-  //Sujeto de comportamiento para manejar la lista de inscripciones
+  // Clave estandarizada para el proyecto UMES
+  private readonly STORAGE_KEY = 'umes_inscripciones';
+  
   private inscripcionesSubject = new BehaviorSubject<Inscripcion[]>([]);
   public inscripciones$: Observable<Inscripcion[]> = this.inscripcionesSubject.asObservable();
 
-  //Constructor que carga las inscripciones desde el almacenamiento local al inicializar el servicio
   constructor() {
     this.cargarDeStorage();
   }
 
-
-  //Carga las inscripciones desde el local storage.
   private cargarDeStorage(): void {
     const data = localStorage.getItem(this.STORAGE_KEY);
     const inscripciones: Inscripcion[] = data ? JSON.parse(data) : [];
     this.inscripcionesSubject.next(inscripciones);
   }
 
-  //Guarda las inscripciones en el locar storage.
   private guardarEnStorage(inscripciones: Inscripcion[]): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(inscripciones));
     this.inscripcionesSubject.next(inscripciones);
   }
 
-
   getInscripciones(): Inscripcion[] {
     return this.inscripcionesSubject.getValue();
   }
-
   
   getInscripcionById(id: string): Inscripcion | undefined {
     return this.getInscripciones().find(i => i.id === id);
   }
 
   agregarInscripcion(inscripcion: Inscripcion): void {
-    const lista = [...this.getInscripciones(), inscripcion];
+    // Generación automática de ID si no viene asignado
+    const nuevaInscripcion = {
+      ...inscripcion,
+      id: inscripcion.id && inscripcion.id.trim() !== '' ? inscripcion.id : 'INS-' + Date.now()
+    };
+    const lista = [...this.getInscripciones(), nuevaInscripcion];
     this.guardarEnStorage(lista);
   }
 

@@ -4,7 +4,5 @@ export interface Curso {
     nombre: string;
     creditos: number;
     carrera: string; 
-    estatus: 'Activo' | 'Inactivo';
+    estatus: 'Planificado' | 'Abierto' | 'En curso' | 'Cerrado' | 'Cancelado';
 }
-
-//estatus: 'Planificado' | 'Abierto' | 'En curso' | 'Cerrado' | 'Cancelado';
