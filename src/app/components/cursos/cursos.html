@@ -1,0 +1,114 @@
+<div class="container">
+    <h2>Gestión de Cursos</h2>
+
+    <form [formGroup]="formCurso" (ngSubmit)="guardarCurso()" class="form-container">
+
+
+        
+        <!-- Fila 1: Código y Nombre -->
+        <div class="grid-row">
+            
+
+            <!-- Código -->
+            <div class="form-group"
+                [class.has-error]="formCurso.get('codigo')?.invalid && formCurso.get('codigo')?.touched">
+                <div class="floating-label-group">
+                    <input type="text" formControlName="codigo" placeholder=" " id="codigo">
+                    <label for="codigo">Código del curso*</label>
+                </div>
+                <small *ngIf="formCurso.get('codigo')?.invalid && formCurso.get('codigo')?.touched" class="error-msg">
+                    El dato es requerido
+                </small>
+            </div>
+
+            <!-- Nombre -->
+            <div class="form-group"
+                [class.has-error]="formCurso.get('nombre')?.invalid && formCurso.get('nombre')?.touched">
+                <div class="floating-label-group">
+                    <input type="text" formControlName="nombre" placeholder=" " id="nombre">
+                    <label for="nombre">Nombre del curso*</label>
+                </div>
+                <small *ngIf="formCurso.get('nombre')?.invalid && formCurso.get('nombre')?.touched" class="error-msg">
+                    El dato es requerido
+                </small>
+            </div>
+
+        </div>
+
+        <!-- Fila 2: Créditos y Carrera -->
+        <div class="grid-row">
+
+            <!-- Créditos (Con su etiqueta flotante fija para que el piloto sepa qué es) -->
+            <div class="form-group"
+                [class.has-error]="formCurso.get('creditos')?.invalid && formCurso.get('creditos')?.touched">
+                <div class="floating-label-group">
+                    <input type="number" formControlName="creditos" placeholder=" " id="creditos" min="1" max="10">
+                    <label for="creditos">Créditos (1-10)*</label>
+                </div>
+                <small *ngIf="formCurso.get('creditos')?.invalid && formCurso.get('creditos')?.touched"
+                    class="error-msg">
+                    Debe ser un valor entre 1 y 10
+                </small>
+            </div>
+
+            <!-- Carrera -->
+            <div class="form-group"
+                [class.has-error]="formCurso.get('carrera')?.invalid && formCurso.get('carrera')?.touched">
+                <div class="floating-label-group">
+                    <input type="text" formControlName="carrera" placeholder=" " id="carrera">
+                    <label for="carrera">Carrera / Área académica*</label>
+                </div>
+                <small *ngIf="formCurso.get('carrera')?.invalid && formCurso.get('carrera')?.touched" class="error-msg">
+                    El dato es requerido
+                </small>
+            </div>
+
+        </div>
+
+        <!-- Fila 3: Estatus -->
+        <div class="grid-row">
+            <div class="form-group">
+                <div class="floating-label-group">
+                    <select formControlName="estatus" id="estatus">
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                    </select>
+                    <label for="estatus" class="select-label">Estatus*</label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" [disabled]="formCurso.invalid" class="btn-submit">
+            {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+        </button>
+    </form>
+
+    <hr style="margin: 20px 0;">
+
+    <!-- Tabla de Cursos -->
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Créditos</th>
+                <th>Carrera / Área</th>
+                <th>Estatus</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let c of cursos">
+                <td>{{ c.codigo }}</td>
+                <td>{{ c.nombre }}</td>
+                <td>{{ c.creditos }}</td>
+                <td>{{ c.carrera }}</td>
+                <td>{{ c.estatus }}</td>
+                <td>
+                    <button (click)="editarCurso(c)" class="btn-action">Editar</button>
+                    <button (click)="eliminarCurso(c.id)" class="btn-danger">Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
