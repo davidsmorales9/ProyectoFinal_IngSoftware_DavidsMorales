@@ -1,24 +1,31 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+  ValidatorFn
+} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { EstudianteService } from '../../services/estudiante';
 import { Estudiante } from '../../models/estudiante';
 
-// Función de validación personalizada para el rango de edad (Paso 1)
 function validarRangoEdad(minEdad: number, maxEdad: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     if (!control.value) {
-      return null; 
+      return null;
     }
 
     const fechaNacimiento = new Date(control.value);
     const hoy = new Date();
-    
+
     let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
     const mes = hoy.getMonth() - fechaNacimiento.getMonth();
-    
+
     if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
       edad--;
     }
@@ -26,12 +33,12 @@ function validarRangoEdad(minEdad: number, maxEdad: number): ValidatorFn {
     if (edad < minEdad) {
       return { edadMinima: { minPermitida: minEdad, edadActual: edad } };
     }
-    
+
     if (edad > maxEdad) {
       return { edadMaxima: { maxPermitida: maxEdad, edadActual: edad } };
     }
 
-    return null; 
+    return null;
   };
 }
 
@@ -39,15 +46,16 @@ function validarRangoEdad(minEdad: number, maxEdad: number): ValidatorFn {
   selector: 'app-estudiantes',
   standalone: true,
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
-    MatFormFieldModule, 
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
     MatInputModule
   ],
   templateUrl: './estudiantes.html',
   styleUrl: './estudiantes.css'
 })
 export class Estudiantes implements OnInit {
+
   private fb = inject(FormBuilder);
   private estudianteService = inject(EstudianteService);
 
@@ -56,8 +64,12 @@ export class Estudiantes implements OnInit {
   modoEdicion: boolean = false;
   idEdicion: string | null = null;
 
-  // Catálogo requerido para alimentar el combobox de género
-  generosCatalogo: string[] = ['Masculino', 'Femenino', 'Otro', 'Prefiero no indicar'];
+  generosCatalogo: string[] = [
+    'Masculino',
+    'Femenino',
+    'Otro',
+    'Prefiero no indicar'
+  ];
 
   ngOnInit(): void {
     this.inicializarFormulario();
@@ -73,12 +85,11 @@ export class Estudiantes implements OnInit {
       segundoApellido: [''],
       correo: ['', [Validators.required, Validators.email]],
       carrera: ['', Validators.required],
-      // Validación de rango de edad aplicada (Ej: Mínimo 15 años, Máximo 100 años) (Paso 2)
       fechaNacimiento: ['', [Validators.required, validarRangoEdad(15, 100)]],
       genero: ['', Validators.required],
-      telefono: [''],      
-      direccion: [''],     
-      estatus: ['Activo']  
+      telefono: [''],
+      direccion: [''],
+      estatus: ['Activo']
     });
   }
 
@@ -87,12 +98,15 @@ export class Estudiantes implements OnInit {
   }
 
   guardarEstudiante(): void {
-    if (this.formEstudiante.invalid) return; 
+    if (this.formEstudiante.invalid) {
+      this.formEstudiante.markAllAsTouched();
+      return;
+    }
 
     const datos = this.formEstudiante.value;
-    
+
     const estudiantePayload: Estudiante = {
-      id: this.idEdicion || '',
+      id: this.idEdicion || Date.now().toString(),
       carnet: datos.carnet,
       nombres: `${datos.primerNombre} ${datos.segundoNombre || ''}`.trim(),
       apellidos: `${datos.primerApellido} ${datos.segundoApellido || ''}`.trim(),
@@ -118,7 +132,7 @@ export class Estudiantes implements OnInit {
   editarEstudiante(estudiante: Estudiante): void {
     this.modoEdicion = true;
     this.idEdicion = estudiante.id;
-    
+
     const nombresArr = estudiante.nombres.split(' ');
     const apellidosArr = estudiante.apellidos.split(' ');
 
@@ -141,6 +155,11 @@ export class Estudiantes implements OnInit {
   eliminarEstudiante(id: string): void {
     if (confirm('¿Deseas eliminar este estudiante?')) {
       this.estudianteService.eliminarEstudiante(id);
+
+      if (this.idEdicion === id) {
+        this.resetearFormulario();
+      }
+
       this.cargarEstudiantes();
     }
   }
