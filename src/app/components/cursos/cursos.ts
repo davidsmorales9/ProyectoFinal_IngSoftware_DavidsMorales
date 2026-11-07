@@ -1,26 +1,25 @@
-
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Curso } from '../../models/curso';
-import { CursoService } from '../../services/curso';
+import { CursosService, Curso } from '../../services/cursos.service';
 
 @Component({
   selector: 'app-cursos',
   standalone: true,
-  
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './cursos.html',
   styleUrl: './cursos.css'
 })
-export class Cursos implements OnInit { 
-  private fb = inject(FormBuilder);
-  private cursoService = inject(CursoService);
-
-  cursos: Curso[] = [];
+export class Cursos implements OnInit {
   formCurso!: FormGroup;
+  cursos: Curso[] = [];
   modoEdicion: boolean = false;
   idEdicion: string | null = null;
+
+  constructor(
+    private fb: FormBuilder,
+    private cursosService: CursosService
+  ) {}
 
   ngOnInit(): void {
     this.inicializarFormulario();
@@ -29,63 +28,55 @@ export class Cursos implements OnInit {
 
   inicializarFormulario(): void {
     this.formCurso = this.fb.group({
-      codigo: ['', Validators.required],
-      nombre: ['', Validators.required],
-      creditos: [3, [Validators.required, Validators.min(1), Validators.max(10)]],
-      carrera: ['', Validators.required],
-      estatus: ['Activo', Validators.required]
+      codigo: ['', [Validators.required]],
+      nombre: ['', [Validators.required]],
+      creditos: ['', [Validators.required, Validators.min(1)]]
     });
   }
 
   cargarCursos(): void {
-    this.cursos = this.cursoService.getCursos();
+    this.cursos = this.cursosService.getCursos();
   }
 
   guardarCurso(): void {
-    if (this.formCurso.invalid) return;
+    if (this.formCurso.invalid) {
+      this.formCurso.markAllAsTouched();
+      return;
+    }
 
-    const datos = this.formCurso.value;
-    const cursoPayload: Curso = {
-      id: this.idEdicion || '',
-      codigo: datos.codigo,
-      nombre: datos.nombre,
-      creditos: Number(datos.creditos),
-      carrera: datos.carrera,
-      estatus: datos.estatus
-    };
-
-    if (this.modoEdicion && this.idEdicion !== null) {
-      this.cursoService.actualizarCurso(cursoPayload);
+    if (this.modoEdicion && this.idEdicion) {
+      const cursoEditado: Curso = {
+        id: this.idEdicion,
+        ...this.formCurso.value
+      };
+      this.cursos = this.cursosService.actualizarCurso(cursoEditado);
     } else {
-      this.cursoService.agregarCurso(cursoPayload);
+      this.cursos = this.cursosService.guardarCurso(this.formCurso.value);
     }
 
     this.resetearFormulario();
-    this.cargarCursos();
   }
 
-  editarCurso(curso: Curso): void {
+  editarCurso(item: Curso): void {
     this.modoEdicion = true;
-    this.idEdicion = curso.id;
+    this.idEdicion = item.id;
     this.formCurso.patchValue({
-      codigo: curso.codigo,
-      nombre: curso.nombre,
-      creditos: curso.creditos,
-      carrera: curso.carrera,
-      estatus: curso.estatus
+      codigo: item.codigo,
+      nombre: item.nombre,
+      creditos: item.creditos
     });
   }
 
   eliminarCurso(id: string): void {
-    if (confirm('¿Deseas eliminar este curso?')) {
-      this.cursoService.eliminarCurso(id);
-      this.cargarCursos();
+    this.cursos = this.cursosService.eliminarCurso(id);
+    if (this.idEdicion === id) {
+      this.resetearFormulario();
     }
   }
 
   resetearFormulario(): void {
+    this.formCurso.reset();
     this.modoEdicion = false;
     this.idEdicion = null;
-    this.formCurso.reset({ estatus: 'Activo', creditos: 3 });
   }
 }

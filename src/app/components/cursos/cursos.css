@@ -1,178 +1,52 @@
 .container {
-    max-width: 900px;
-    margin: 30px auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    background: #fff;
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #fff;
 }
 
-h2 {
-    color: #000;
-    margin-bottom: 20px;
-    font-weight: bold;
+.form-row {
+  display: flex;
+  gap: 20px;
 }
 
-.form-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.full-width { min-width: 0; }
+.floating-label-group { position: relative; margin-top: 5px; }
+.floating-label-group input {
+  width: 100%;
+  height: 48px;
+  padding: 16px 12px 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 14px;
+  background: #fff;
 }
-
-.grid-row {
-    display: flex;
-    gap: 20px;
-}
-
-.form-group {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Contenedor del input flotante */
-.floating-label-group {
-    position: relative;
-    margin-top: 5px;
-}
-
-.floating-label-group input,
-.floating-label-group select {
-    width: 100%;
-    padding: 14px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    outline: none;
-    background: transparent;
-    box-sizing: border-box;
-}
-
-.floating-label-group input:focus,
-.floating-label-group select:focus {
-    border-color: #0066cc;
-    border-width: 2px;
-    padding: 13px 11px;
-    /* Compensar el ancho del borde para que no brinque */
-}
-
-/* Estilo por defecto de la etiqueta flotante */
 .floating-label-group label {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: #fff;
-    padding: 0 4px;
-    color: #5c5b5b;
-    font-size: 14px;
-    pointer-events: none;
-    transition: 0.2s ease all;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  padding: 0 4px;
+  color: #555;
+  pointer-events: none;
 }
-
-/* Comportamiento cuando el input tiene foco o contiene texto */
-.floating-label-group input:focus~label,
-.floating-label-group input:not(:placeholder-shown)~label,
-.floating-label-group select:focus~label,
-.floating-label-group select:not([value=""])~label {
-    top: 0;
-    transform: translateY(-50%) scale(0.85);
-    color: #464646;
-    font-weight: bold;
+.floating-label-group input:focus ~ label,
+.floating-label-group input:not(:placeholder-shown) ~ label {
+  top: 0;
+  font-size: 12px;
 }
-
-/* Control de errores (borde y etiqueta rojos) */
-.form-group.has-error .floating-label-group input {
-    border-color: #d9534f;
-    border-width: 2px;
-    padding: 13px 11px;
-}
-
-.form-group.has-error .floating-label-group label {
-    color: #d9534f;
-}
-
-.form-group.has-error input:focus~label {
-    color: #d9534f;
-}
-
-.error-msg {
-    color: #d9534f;
-    font-size: 12px;
-    margin-top: 4px;
-}
-
-.btn-submit {
-    padding: 10px 20px;
-    background-color: #f0f0f0;
-    color: #333;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-    align-self: flex-start;
-}
-
-.btn-submit:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.styled-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.styled-table th,
-.styled-table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-.styled-table th {
-    background-color: #f8f8f8;
-    font-weight: bold;
-}
-
-.btn-action,
-.btn-danger {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    color: white;
-    margin-left: 8px;
-}
-
-.btn-action {
-    background-color: #f0ad4e;
-
-}
-
-.btn-danger {
-    background-color: #d9534f;
-}
-
-/* Unificamos las dimensiones exactas para inputs y selectores (comboboxes) */
-.floating-label-group input,
-.floating-label-group select {
-    width: 100%;
-    height: 48px;
-    /* Altura idéntica para ambos */
-    padding: 16px 12px 4px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    outline: none;
-    background: #fff;
-    box-sizing: border-box;
-    /* Evita desbordamientos de tamaño */
-}
-
-.floating-label-group input:focus,
-.floating-label-group select:focus {
-    border-color: #0066cc;
-    border-width: 2px;
-    padding: 15px 11px 3px 11px;
-}
+.has-error input { border-color: #d9534f; }
+.error-msg { display: block; color: #d9534f; font-size: 12px; margin-top: 4px; }
+.form-actions { margin: 20px 0; }
+.btn { padding: 10px 18px; margin-right: 10px; cursor: pointer; }
+.btn:disabled { cursor: not-allowed; opacity: .6; }
+.tabla-custom { width: 100%; border-collapse: collapse; margin-top: 20px; }
+.tabla-custom th, .tabla-custom td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+.tabla-custom th { background: #f8f8f8; }
+.btn-action { padding: 6px 10px; margin-right: 8px; border: 0; cursor: pointer; }
+.edit { background: #f0ad4e; }
+.delete { background: #d9534f; color: #fff; }
+.no-data { text-align: center !important; }
